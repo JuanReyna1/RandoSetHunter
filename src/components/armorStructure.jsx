@@ -1,19 +1,23 @@
 import SetPiece from "./SetPiece"
 
-export function ArmorStructure({armor = []}){
-
-    const armorPieces = [
-        "Helmet",
-        "Torso",
-        "Arms",
-        "Legs",
-        "Boots"
-    ]
-
+export function ArmorStructure({ armor = {} }) {
     return (
         <div className='armor'>
-            {armorPieces.map(piece => (
-                <SetPiece pieceName={piece} />
+            {Object.entries(armor).map(([key, value]) => (
+                <div key={key}>
+                    <table border={5}>
+                        <thead>
+                            <tr>
+                                <th>{key}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{value?.names?.en ?? "Empty"}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             ))}
         </div>
     )

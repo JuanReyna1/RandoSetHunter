@@ -2,6 +2,7 @@ import rawArmor from './Armor.json'
 
 function transformArmor(){
     return rawArmor.map(set => ({
+        game_id : set.game_id,
         name : set.names.en,
         rarity : set.rarity,
         setBonus : set.set_bonus,
@@ -16,9 +17,11 @@ export const armor = transformArmor()
 
 export const categorized = armor.reduce((acc, set) => {
     set.pieces.forEach(piece => {
-        acc[piece.kind].push(piece, {
+        acc[piece.kind].push({ 
+                ...piece, 
                 setBonusId : set.setBonusId,
-                groupBonusId : set.groupBonusId
+                groupBonusId : set.groupBonusId,
+                setBelong : set.game_id
             }
         );
     });
