@@ -13,6 +13,8 @@ import rawLongSword from './LongSword.json'
 import rawSwitchAxe from './SwitchAxe.json'
 import rawSwordShield from './SwordShield.json'
 
+
+
 const rawWeapons = {
   'Bow': rawBow,
   'Charge Blade': rawChargeBlade,
