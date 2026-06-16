@@ -14,7 +14,7 @@ function transformArmor(){
 
 export const armor = transformArmor()
 
-export const categorized = armorSets.reduce((acc, set) => {
+export const categorized = armor.reduce((acc, set) => {
     set.pieces.forEach(piece => {
         acc[piece.kind].push(piece, {
                 setBonusId : set.setBonusId,
@@ -24,3 +24,8 @@ export const categorized = armorSets.reduce((acc, set) => {
     });
     return acc;
     }, { head: [], chest: [], arms: [], waist: [], legs: [] });
+
+export function randomPiece(type) {
+    const options = categorized[type];
+    return options[Math.floor(Math.random() * options.length)];
+}

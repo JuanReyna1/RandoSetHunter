@@ -2,19 +2,20 @@ import SetPiece from "../components/SetPiece"
 import ArmorStructure from "../components/armorStructure"
 import { useState } from 'react'
 import Button from "../components/Button"
-import { armor, categorized} from '../data/index'
+import { armor, categorized, randomPiece} from '../data/index'
+
 
 function RandoSet(){
 
     const defaultSet = {
-        armor : []
+        armor : { head: {}, chest: {}, arms: {}, waist: {}, legs: {} }
     }
 
     const [set, setSet] = new useState(defaultSet)
     const [te, setTe] = new useState()
 
     function randomSet(){
-        setTe("Hello")
+        setTe(randomPiece("head").names.en)
     }
 
     return(
