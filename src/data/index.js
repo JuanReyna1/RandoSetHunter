@@ -57,8 +57,10 @@ const sortedDecos = {
     armor : sortedArmorDecos
 }
 
+
 export function randomDeco(type, level){
-    const chosenDecos = sortedDecos[type][level]
+    const trueLevel = Math.floor(Math.random() * level) + 1
+    const chosenDecos = sortedDecos[type][trueLevel]
     const length = chosenDecos.length
     const randomNum = Math.floor(Math.random() * length)
     return chosenDecos[randomNum]

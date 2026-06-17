@@ -49,19 +49,25 @@ function transformWeapons(rawData) {
     }))
 }
 
-export function extractNamesByType(typeIn){
+function extractNamesByType(typeIn){
   return [...new Set(rawWeapons[typeIn].map(weapon => weapon.names.en))]
 }
 
 // Seperated types 
-export const weaponData = Object.fromEntries(
+const weaponData = Object.fromEntries(
   Object.entries(rawWeapons).map(([type, data]) => [
     type,
     transformWeapons(data)
   ])
 )
 
-export const allWeapons = Object.values(weaponData)
+const allWeapons = Object.values(weaponData)
+
+const artianNames = "Angelbein, Chrono Gear, Tiltkreise, Varianza, Argenesis, Moteurvankel, Greifen, Omiltika, Diprielcha, Skyscraper, Animilater, Dimensius, Mundus Altus, Verdoloto, Ostrak Oblivion, Eternal Cusp, Promised Abyss, Wicked Regnum, Headsman's Hamus, Auguring Omen, Limbo Llor, Calamitous Angel, Trembling Hels, Aether Pike, Bound Admonition, Bethorned Agony, Onyx Choros, Kyrie Verd"
+
+export function isArtian(name){
+  return artianNames.includes(name) || name.includes('Artian')
+}
 
 export function randomWeapon(){
   const type = Math.floor(Math.random() * allWeapons.length)

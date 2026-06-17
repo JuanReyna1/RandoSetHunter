@@ -3,13 +3,13 @@ import ArmorStructure from "../components/armorStructure"
 import { useState, useEffect } from 'react'
 import Button from "../components/Button"
 import { randomPiece, randomDeco } from '../data/index'
-import { allWeapons, randomWeapon, weaponData } from '../data/weapons/index'
+import { randomWeapon, isArtian } from '../data/weapons/index'
 import WeaponStructure from "../components/weaponStructure"
 
 function RandoSet(){
 
     /**
-     * Initial random default set
+     * Initial random default set for initial render
      */
 
     const defaultSet = {
@@ -25,7 +25,10 @@ function RandoSet(){
 
     const defaultSlotted = {
         weaponSlotted : defaultSet.weapon?.slots?.map(level => randomDeco("weapon", level)) ?? [],
-        armorSlotted : []
+        armorSlotted : Object.entries(defaultSet.armor).reduce((acc, [key, piece]) => {
+                acc[key] = piece.slots.map(level => randomDeco('armor', level))
+                return acc
+            }, { head: [], chest: [], arms: [], waist: [], legs: [] })
     }
 
     /**
@@ -67,7 +70,6 @@ function RandoSet(){
 
     return(
         <div id='RandoSet'>
-            <h1>Test</h1>
             <WeaponStructure weapon={set.weapon} slotted={slotted.weaponSlotted} />
             <ArmorStructure armor={set.armor} slotted={slotted.armorSlotted} />
             <Button onClick={ () => randomSet() }/>
@@ -75,6 +77,7 @@ function RandoSet(){
                 useEffect(() => {
                     console.log(set)
                     console.log(slotted)
+                    console.log(isArtian(set.weapon.name))
                 }, [set, slotted])
             }
         </div>
