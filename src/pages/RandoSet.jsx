@@ -8,35 +8,60 @@ import WeaponStructure from "../components/weaponStructure"
 
 function RandoSet(){
 
+    /**
+     * Initial random default set
+     */
+
     const defaultSet = {
-        armor : { head: {}, chest: {}, arms: {}, waist: {}, legs: {} },
-        weapon : {}
-    }
-
-    const defaultSlotted = {
-        weaponSlotted : [],
-        armorSlotted : []
-    }
-
-    const [set, setSet] = new useState(defaultSet)
-    const [slotted, setSlotted] = new useState(defaultSlotted)
-
-    function randomSet(){
-        setSet(prev => ({
-            ...prev,
-            armor: {
+        armor : {
             head: randomPiece("head"),
             chest: randomPiece("chest"),
             arms: randomPiece("arms"),
             waist: randomPiece("waist"),
             legs: randomPiece("legs"),
-            },
-            weapon: randomWeapon()
+        },
+        weapon : randomWeapon()
+    }
+
+    const defaultSlotted = {
+        weaponSlotted : defaultSet.weapon?.slots?.map(level => randomDeco("weapon", level)) ?? [],
+        armorSlotted : []
+    }
+
+    /**
+     * Sets for containing all necessary data for the armor pieces and weapon itself
+     * Seperate useState for ease of access to update the slots of the set
+     */
+
+    const [set, setSet] = new useState(defaultSet)
+    const [slotted, setSlotted] = new useState(defaultSlotted)
+
+   
+    // Derived locally to avoid reading stale state in setSlotted
+    
+    function randomSet(){
+
+        const newWeapon = randomWeapon()
+        const newArmor = { 
+            head: randomPiece("head"),
+            chest: randomPiece("chest"),
+            arms: randomPiece("arms"),
+            waist: randomPiece("waist"),
+            legs: randomPiece("legs"),
+        }
+
+        setSet(prev => ({
+            ...prev,
+            armor: newArmor,
+            weapon: newWeapon
         }));
 
         setSlotted(prev => ({
-            weaponSlotted : set.weapon?.slots?.map(slot => randomDeco("weapon", slot)) ?? []
-            //armorSlotted : set.armor.slots.map(slot => rand)
+            weaponSlotted : newWeapon.slots.map(level => randomDeco("weapon", level)) ?? [],
+            armorSlotted: Object.entries(newArmor).reduce((acc, [key, piece]) => {
+                acc[key] = piece.slots.map(level => randomDeco('armor', level))
+                return acc
+            }, { head: [], chest: [], arms: [], waist: [], legs: [] })
         }))
     }
 
@@ -44,7 +69,7 @@ function RandoSet(){
         <div id='RandoSet'>
             <h1>Test</h1>
             <WeaponStructure weapon={set.weapon} slotted={slotted.weaponSlotted} />
-            <ArmorStructure armor={set.armor}/>
+            <ArmorStructure armor={set.armor} slotted={slotted.armorSlotted} />
             <Button onClick={ () => randomSet() }/>
             {
                 useEffect(() => {

@@ -1,6 +1,7 @@
 import SetPiece from "./SetPiece"
+import DecoSlots from "./DecoSlots"
 
-export function ArmorStructure({ armor = {} }) {
+export function ArmorStructure({ armor = {}, slotted = {} }) {
     return (
         <div className='armor'>
             {Object.entries(armor).map(([key, value]) => (
@@ -9,11 +10,17 @@ export function ArmorStructure({ armor = {} }) {
                         <thead>
                             <tr>
                                 <th>{key}</th>
+                                <th>Deco Slots</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>{value?.names?.en ?? "Empty"}</td>
+                                <td>
+                                    {value.names.en}
+                                </td>
+                                <td>
+                                    <DecoSlots slotted={slotted[key]} />    
+                                </td>
                             </tr>
                         </tbody>
                     </table>
