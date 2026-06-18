@@ -1,7 +1,7 @@
 import SetPiece from "./SetPiece"
 import DecoSlots from "./DecoSlots"
 
-export function ArmorStructure({ armor = {}, slotted = {}, handleTranscend }) {
+export function ArmorStructure({ armor = {}, slotted = {}, handleTranscend, transcended = {} }) {
     return (
         <div className='armor'>
             {Object.entries(armor).map(([key, value]) => (
@@ -22,10 +22,10 @@ export function ArmorStructure({ armor = {}, slotted = {}, handleTranscend }) {
                                         <div>
                                             <br></br>
                                             <label>Transcended</label>
-                                            <input type="checkbox" onChange={
+                                            <input type="button" value={transcended[key] ? "Undo" : "Transcend"} onClick={
                                                 (e) => {
-                                                    console.log(e.target.checked)
-                                                    if(e.target.checked) handleTranscend(key)
+                                                    console.log(key)
+                                                    handleTranscend(key)
                                                 }
                                             }
                                             ></input>

@@ -95,6 +95,8 @@ function RandoSet(){
         const maxSlotLength = rarity === 5 ? 3 : 2
         const maxSlotLevel = 3
 
+        updateTranscendence( { ...transcended, [kind]: true } )
+
         slots = slots.map(level => Math.min(level + 1, maxSlotLevel))
             for(let i = slots.length; i < maxSlotLength; i += 1){
                 slots.push(1)
@@ -111,8 +113,14 @@ function RandoSet(){
     }
 
     function unTranscend(kind){
-        updateSet({...set.armor, [kind] : { ...set.armor[kind], slots: ogSlots[kind]} })
-        updateSlotted({ ...slotted.armorSlotted, [kind] : randomizePieceSlots(kind, ogSlots[kind])}, {...slotted.weaponSlotted})
+        updateTranscendence( { ...transcended, [kind]: false } )
+        const newArmor = {...set.armor, [kind] : { ...set.armor[kind], slots: ogSlots[kind] }}
+        const newArmorSlotted = { ...slotted.armorSlotted, [kind] : randomizePieceSlots(kind, ogSlots[kind])}
+        console.log(newArmor)
+        console.log(newArmorSlotted)
+        console.log("Here")
+        updateSet(newArmor, { ...set.weapon })
+        updateSlotted(newArmorSlotted, [...slotted.weaponSlotted])
     }
 
     //Reusable for rerolling selective pieces
@@ -147,7 +155,7 @@ function RandoSet(){
     return(
         <div id='RandoSet'>
             <WeaponStructure weapon={set.weapon} slotted={slotted.weaponSlotted} />
-            <ArmorStructure armor={set.armor} slotted={slotted.armorSlotted} handleTranscend={(kind) => handleTranscend(kind)} />
+            <ArmorStructure armor={set.armor} slotted={slotted.armorSlotted} handleTranscend={(kind) => handleTranscend(kind)} transcended={transcended} />
             <Button onClick={ () => randomSet() }/>
             <Button onClick={ () => transcend('head', false)} />
             {
