@@ -31,6 +31,11 @@ function RandoSet(){
             }, { head: [], chest: [], arms: [], waist: [], legs: [] })
     }
 
+    const defaultTranscendence = { head: false, chest: false, arms: false, waist: false, legs: false }
+    const defaultOgSlots = Object.fromEntries(
+                Object.entries(defaultSet.armor).map(([key, piece]) => [key, piece.slots])
+            )
+
     /**
      * Sets for containing all necessary data for the armor pieces and weapon itself
      * Seperate useState for ease of access to update the slots of the set
@@ -38,7 +43,8 @@ function RandoSet(){
 
     const [set, setSet] = new useState(defaultSet)
     const [slotted, setSlotted] = new useState(defaultSlotted)
-
+    const [transcended, setTranscended] = new useState(defaultTranscendence)
+    const [ogSlots, setOgSlots] = new useState(defaultOgSlots)
    
     // Derived locally to avoid reading stale state in setSlotted
     
@@ -53,31 +59,105 @@ function RandoSet(){
             legs: randomPiece("legs"),
         }
 
+        const tempSlots = Object.fromEntries(
+                Object.entries(newArmor).map(([key, piece]) => [key, piece.slots])
+            )
+
+        updateOgSlots(tempSlots)
+        //console.log(tempSlots)
+
+        const newWepSlots = newWeapon.slots.map(level => randomDeco("weapon", level)) ?? [];
+        const newArmSlots = Object.entries(newArmor).reduce((acc, [key, piece]) => {
+                acc[key] = piece.slots.map(level => randomDeco('armor', level))
+                return acc
+            }, { head: [], chest: [], arms: [], waist: [], legs: [] })
+            
+
+        updateSet(newArmor, newWeapon)
+        updateSlotted(newArmSlots, newWepSlots)
+        
+    }
+
+    function handleTranscend(kind){
+        //updateTranscendence( { ...transcended, [kind]: !transcended[kind] } )
+        !transcended[kind] ? transcend(kind) : unTranscend(kind)
+    }
+
+    //Decos to be reseted if armor piece is transcended
+
+    function transcend(kind){
+
+        const newArmor = { ...set.armor }
+        const piece = { ...newArmor[kind] }
+        let slots = piece.slots
+        const rarity = piece.rarity
+        if (rarity < 5 || rarity > 6) return;
+        const maxSlotLength = rarity === 5 ? 3 : 2
+        const maxSlotLevel = 3
+
+        slots = slots.map(level => Math.min(level + 1, maxSlotLevel))
+            for(let i = slots.length; i < maxSlotLength; i += 1){
+                slots.push(1)
+            }
+
+        //console.log(slots + " Rarity " + rarity)
+        newArmor[kind] = { ...piece, slots }
+        updateSet(newArmor, { ...set.weapon })
+
+        const newPieceSlotted = randomizePieceSlots({ ...slotted.armorSlotted[kind] }, slots )
+        //console.log(newPieceSlotted)
+        updateSlotted( { ...slotted.armorSlotted, [kind]: newPieceSlotted }, [ ...slotted.weaponSlotted ] )
+
+    }
+
+    function unTranscend(kind){
+        updateSet({...set.armor, [kind] : { ...set.armor[kind], slots: ogSlots[kind]} })
+        updateSlotted({ ...slotted.armorSlotted, [kind] : randomizePieceSlots(kind, ogSlots[kind])}, {...slotted.weaponSlotted})
+    }
+
+    //Reusable for rerolling selective pieces
+
+    function randomizePieceSlots(kind, slots){
+        return slots.map(level => randomDeco('armor', level))
+    }
+
+    function updateSet(newArmor, newWeapon){
         setSet(prev => ({
             ...prev,
             armor: newArmor,
             weapon: newWeapon
         }));
+    }
 
+    function updateSlotted(newArmSlots, newWepSlots){
         setSlotted(prev => ({
-            weaponSlotted : newWeapon.slots.map(level => randomDeco("weapon", level)) ?? [],
-            armorSlotted: Object.entries(newArmor).reduce((acc, [key, piece]) => {
-                acc[key] = piece.slots.map(level => randomDeco('armor', level))
-                return acc
-            }, { head: [], chest: [], arms: [], waist: [], legs: [] })
+            weaponSlotted : newWepSlots,
+            armorSlotted: newArmSlots
         }))
+    }
+
+    function updateTranscendence(newTranscended){
+        setTranscended(newTranscended)
+    }
+
+    function updateOgSlots(slots){
+        setOgSlots(slots)
     }
 
     return(
         <div id='RandoSet'>
             <WeaponStructure weapon={set.weapon} slotted={slotted.weaponSlotted} />
-            <ArmorStructure armor={set.armor} slotted={slotted.armorSlotted} />
+            <ArmorStructure armor={set.armor} slotted={slotted.armorSlotted} handleTranscend={(kind) => handleTranscend(kind)} />
             <Button onClick={ () => randomSet() }/>
+            <Button onClick={ () => transcend('head', false)} />
             {
                 useEffect(() => {
                     console.log(set)
                     console.log(slotted)
-                    console.log(isArtian(set.weapon.name))
+                    //console.log(isArtian(set.weapon.name))
+                    //console.log({ ...slotted.weaponSlotted })
+                    //console.log(set.armor.head.slots)
+                    console.log(ogSlots)
                 }, [set, slotted])
             }
         </div>

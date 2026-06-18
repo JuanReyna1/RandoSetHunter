@@ -29,7 +29,8 @@ export const categorized = armor.reduce((acc, set) => {
                 ...piece, 
                 setBonusId : set.setBonusId,
                 groupBonusId : set.groupBonusId,
-                setBelong : set.game_id
+                setBelong : set.game_id,
+                rarity : set.rarity
             }
         );
     });
@@ -70,3 +71,4 @@ export function randomPiece(type) {
     const options = categorized[type];
     return options[Math.floor(Math.random() * options.length)];
 }
+
