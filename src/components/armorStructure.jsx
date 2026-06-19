@@ -24,7 +24,6 @@ export function ArmorStructure({ armor = {}, slotted = {}, handleTranscend, tran
                                             <label>Transcended</label>
                                             <input type="button" value={transcended[key] ? "Undo" : "Transcend"} onClick={
                                                 (e) => {
-                                                    console.log(key)
                                                     handleTranscend(key)
                                                 }
                                             }

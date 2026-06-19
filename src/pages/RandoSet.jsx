@@ -38,7 +38,6 @@ function RandoSet(){
             )
     const defaultTalisman = randomTalisman()
     const defaultCombo = defaultTalisman.possibleSlotCombos[rng(0,defaultTalisman.possibleSlotCombos.length)]
-    console.log(defaultCombo)
     const defaultTalisSkills = {
         skills: randomizeTalisSkills(defaultTalisman),
         decos: randTalisDecos(defaultCombo)
@@ -70,9 +69,9 @@ function RandoSet(){
         }
 
         const newTalisman = randomTalisman()
-        const combo = defaultTalisman.possibleSlotCombos[rng(0,defaultTalisman.possibleSlotCombos.length)]
+        const combo = newTalisman.possibleSlotCombos[rng(0,newTalisman.possibleSlotCombos.length)]
         const newTalisSkills = {
-            skills: randomizeTalisSkills(defaultTalisman),
+            skills: randomizeTalisSkills(newTalisman),
             decos: randTalisDecos(combo)
         }
 
@@ -84,7 +83,6 @@ function RandoSet(){
             )
 
         updateOgSlots(tempSlots)
-        //console.log(tempSlots)
 
         const newWepSlots = newWeapon.slots.map(level => randomDeco("weapon", level)) ?? [];
         const newArmSlots = Object.entries(newArmor).reduce((acc, [key, piece]) => {
@@ -122,12 +120,10 @@ function RandoSet(){
                 slots.push(1)
             }
 
-        //console.log(slots + " Rarity " + rarity)
         newArmor[kind] = { ...piece, slots }
         updateSet(newArmor, { ...set.weapon })
 
         const newPieceSlotted = randomizePieceSlots({ ...slotted.armorSlotted[kind] }, slots )
-        //console.log(newPieceSlotted)
         updateSlotted( { ...slotted.armorSlotted, [kind]: newPieceSlotted }, [ ...slotted.weaponSlotted ] )
 
     }
@@ -170,7 +166,7 @@ function RandoSet(){
     }
 
     function updateTalisman(newTalisman){
-        setTalisman(talisman)
+        setTalisman(newTalisman)
     }
 
     function updateTalisSkills(newInternal){
@@ -185,13 +181,8 @@ function RandoSet(){
             <Button onClick={ () => randomSet() }/>
             {
                 useEffect(() => {
-                    //console.log(set)
-                    //console.log(slotted)
-                    //console.log(isArtian(set.weapon.name))
-                    //console.log({ ...slotted.weaponSlotted })
-                    //console.log(set.armor.head.slots)
-                    //console.log(ogSlots)
-                    //console.log(talisman)
+                    //console.log(set.weapon)
+                    console.log(talisman)
                     //console.log(talisInternals)
                 }, [set, slotted])
             }

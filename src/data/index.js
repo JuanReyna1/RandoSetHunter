@@ -94,7 +94,6 @@ function getSkill(groupNum){
 }
 
 export function randomizeTalisSkills(talisman){
-    console.log(talisman)
     return groups.map(group => getSkill(talisman[group]))
 }
 
