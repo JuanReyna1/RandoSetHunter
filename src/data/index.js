@@ -1,5 +1,7 @@
 import rawArmor from './Armor.json'
 import rawDeco from './Accessory.json'
+import talisman_layouts from './talisman_layouts.json'
+import talisman_groups from './talisman_skill_groups.json'
 
 function transformArmor(){
     return rawArmor.map(set => ({
@@ -53,22 +55,49 @@ const sortedArmorDecos = groupedDecos["armor"].reduce((acc, deco) => {
     return acc
 }, { 1 : [], 2: [], 3 : []})
 
+export function totalArmor(level){
+    console.log(sortedArmorDecos[level].length)
+}
+
 const sortedDecos = {
     weapon : sortedWeaponDecos,
     armor : sortedArmorDecos
 }
 
+export function rng(min = 0, max){
+    return Math.floor( Math.random() * (max - min) + min)
+}
 
 export function randomDeco(type, level){
-    const trueLevel = Math.floor(Math.random() * level) + 1
+    const trueLevel = rng(0, level) + 1
     const chosenDecos = sortedDecos[type][trueLevel]
     const length = chosenDecos.length
-    const randomNum = Math.floor(Math.random() * length)
+    const randomNum = rng(0, length)
     return chosenDecos[randomNum]
 }
 
 export function randomPiece(type) {
     const options = categorized[type];
-    return options[Math.floor(Math.random() * options.length)];
+    return options[rng(0, options.length)];
 }
 
+export function randomTalisman(){
+    return { ...talisman_layouts[rng(0,talisman_layouts.length)] }
+}
+
+const groups = ["skill1Group", "skill2Group", "skill3Group"]
+
+function getSkill(groupNum){
+    if(groupNum === null) return null
+    const group = talisman_groups[groupNum]
+    return group[rng(0, group.length)]
+}
+
+export function randomizeTalisSkills(talisman){
+    console.log(talisman)
+    return groups.map(group => getSkill(talisman[group]))
+}
+
+export function randTalisDecos(combo){
+    return combo.map(slot => slot === "W1" ? randomDeco('weapon', 1) : randomDeco('armor', slot))
+}

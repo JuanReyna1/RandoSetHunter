@@ -2,9 +2,10 @@ import SetPiece from "../components/SetPiece"
 import ArmorStructure from "../components/armorStructure"
 import { useState, useEffect } from 'react'
 import Button from "../components/Button"
-import { randomPiece, randomDeco } from '../data/index'
+import { randomPiece, randomDeco, randomTalisman, totalArmor, randomizeTalisSkills, rng, randTalisDecos } from '../data/index'
 import { randomWeapon, isArtian } from '../data/weapons/index'
 import WeaponStructure from "../components/weaponStructure"
+import Talisman from "../components/Talisman"
 
 function RandoSet(){
 
@@ -35,6 +36,13 @@ function RandoSet(){
     const defaultOgSlots = Object.fromEntries(
                 Object.entries(defaultSet.armor).map(([key, piece]) => [key, piece.slots])
             )
+    const defaultTalisman = randomTalisman()
+    const defaultCombo = defaultTalisman.possibleSlotCombos[rng(0,defaultTalisman.possibleSlotCombos.length)]
+    console.log(defaultCombo)
+    const defaultTalisSkills = {
+        skills: randomizeTalisSkills(defaultTalisman),
+        decos: randTalisDecos(defaultCombo)
+    }
 
     /**
      * Sets for containing all necessary data for the armor pieces and weapon itself
@@ -45,6 +53,8 @@ function RandoSet(){
     const [slotted, setSlotted] = new useState(defaultSlotted)
     const [transcended, setTranscended] = new useState(defaultTranscendence)
     const [ogSlots, setOgSlots] = new useState(defaultOgSlots)
+    const [talisman, setTalisman] = new useState(defaultTalisman)
+    const [talisInternals, setTalisInternals] = new useState(defaultTalisSkills)
    
     // Derived locally to avoid reading stale state in setSlotted
     
@@ -58,6 +68,16 @@ function RandoSet(){
             waist: randomPiece("waist"),
             legs: randomPiece("legs"),
         }
+
+        const newTalisman = randomTalisman()
+        const combo = defaultTalisman.possibleSlotCombos[rng(0,defaultTalisman.possibleSlotCombos.length)]
+        const newTalisSkills = {
+            skills: randomizeTalisSkills(defaultTalisman),
+            decos: randTalisDecos(combo)
+        }
+
+        updateTalisman(newTalisman)
+        updateTalisSkills(newTalisSkills)
 
         const tempSlots = Object.fromEntries(
                 Object.entries(newArmor).map(([key, piece]) => [key, piece.slots])
@@ -116,9 +136,6 @@ function RandoSet(){
         updateTranscendence( { ...transcended, [kind]: false } )
         const newArmor = {...set.armor, [kind] : { ...set.armor[kind], slots: ogSlots[kind] }}
         const newArmorSlotted = { ...slotted.armorSlotted, [kind] : randomizePieceSlots(kind, ogSlots[kind])}
-        console.log(newArmor)
-        console.log(newArmorSlotted)
-        console.log("Here")
         updateSet(newArmor, { ...set.weapon })
         updateSlotted(newArmorSlotted, [...slotted.weaponSlotted])
     }
@@ -152,20 +169,30 @@ function RandoSet(){
         setOgSlots(slots)
     }
 
+    function updateTalisman(newTalisman){
+        setTalisman(talisman)
+    }
+
+    function updateTalisSkills(newInternal){
+        setTalisInternals(newInternal)
+    }
+
     return(
         <div id='RandoSet'>
             <WeaponStructure weapon={set.weapon} slotted={slotted.weaponSlotted} />
             <ArmorStructure armor={set.armor} slotted={slotted.armorSlotted} handleTranscend={(kind) => handleTranscend(kind)} transcended={transcended} />
+            <Talisman talisman={talisman} internal={talisInternals} />
             <Button onClick={ () => randomSet() }/>
-            <Button onClick={ () => transcend('head', false)} />
             {
                 useEffect(() => {
-                    console.log(set)
-                    console.log(slotted)
+                    //console.log(set)
+                    //console.log(slotted)
                     //console.log(isArtian(set.weapon.name))
                     //console.log({ ...slotted.weaponSlotted })
                     //console.log(set.armor.head.slots)
-                    console.log(ogSlots)
+                    //console.log(ogSlots)
+                    //console.log(talisman)
+                    //console.log(talisInternals)
                 }, [set, slotted])
             }
         </div>
