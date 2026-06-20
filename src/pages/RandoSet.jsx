@@ -182,7 +182,6 @@ function RandoSet(){
             {
                 useEffect(() => {
                     console.log(set.weapon)
-                    getWeaponByName(null, null)
                     //console.log(talisman)
                     //console.log(talisInternals)
                 }, [set, slotted])

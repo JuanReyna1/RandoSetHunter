@@ -76,9 +76,9 @@ const weaponData = Object.fromEntries(
 
 const allWeapons = Object.values(weaponData)
 
-export function getWeaponByName(name, type){
-  console.log(allWeapons["Switch Axe"])
-  //return allWeapons[type].find((weapon) => weapon.name === name)
+export function getWeaponByName(nameIn, type){
+  const weapons = allWeapons.find(array => array[0].kind === type)
+  return weapons.find((weapon) => weapon.name === nameIn)
 }
 
 export function randomWeapon(){
