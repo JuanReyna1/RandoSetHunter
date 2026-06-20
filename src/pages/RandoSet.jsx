@@ -3,11 +3,11 @@ import ArmorStructure from "../components/armorStructure"
 import { useState, useEffect } from 'react'
 import Button from "../components/Button"
 import { randomPiece, randomDeco, randomTalisman, totalArmor, randomizeTalisSkills, rng, randTalisDecos } from '../data/index'
-import { randomWeapon, isArtian } from '../data/weapons/index'
+import { randomWeapon, isArtian, getWeaponByName } from '../data/weapons/index'
 import WeaponStructure from "../components/weaponStructure"
 import Talisman from "../components/Talisman"
 
-function RandoSet(){
+function RandoSet(){   
 
     /**
      * Initial random default set for initial render
@@ -181,8 +181,9 @@ function RandoSet(){
             <Button onClick={ () => randomSet() }/>
             {
                 useEffect(() => {
-                    //console.log(set.weapon)
-                    console.log(talisman)
+                    console.log(set.weapon)
+                    getWeaponByName(null, null)
+                    //console.log(talisman)
                     //console.log(talisInternals)
                 }, [set, slotted])
             }
