@@ -1,16 +1,23 @@
-# React + Vite
+# You will need Node.js
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Node.js must be installed on your machine.
 
-Currently, two official plugins are available:
+# Set Up
+As of June 20, 2026, the core implementation has been completed. Anyone will be able clone the repo and run these commands to install dependancies and start the local server.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```
+npm install
+npm run dev
+```
 
-## React Compiler
+Then click on the url that is provides and enjoy!
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+# Sources
 
-## Expanding the ESLint configuration
+**KreaTV1** : Talisman Builder data
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Link: https://docs.google.com/spreadsheets/d/1tVwtnBmpyad25Uy3PFUheeUCUYG_82DY297MsvHHGQc/edit?usp=sharing
+
+**LartTyler** : MH Wilds Data
+
+Link: https://github.com/LartTyler/mhdb-wilds-data
